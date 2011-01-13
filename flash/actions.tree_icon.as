@@ -89,14 +89,14 @@ class_tree_icon.prototype.getIconType = function(node) {
             this.datainfo.icon = "edit_video";
         } else if (this.datainfo.hasFlash) {
             this.datainfo.icon = "edit_flash";
+        } else if (this.datainfo.hasList) {
+            this.datainfo.icon = "edit_list";
         } else if (this.datainfo.hasText && this.datainfo.hasImg) {
             this.datainfo.icon = "edit_imgtext";
         } else if (this.datainfo.hasHeadline) {
             this.datainfo.icon = "edit_headline";
         } else if (this.datainfo.hasText) {
             this.datainfo.icon = "edit_text";
-        } else if (this.datainfo.hasList) {
-            this.datainfo.icon = "edit_list";
         } else if (this.datainfo.hasImg) {
             this.datainfo.icon = "edit_img";
         } else if (this.datainfo.hasSource) {

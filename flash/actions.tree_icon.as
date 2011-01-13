@@ -19,6 +19,9 @@ class_tree_icon.prototype.getPageDataType = function(node, isNotStartNode) {
         this.dataInfo.hasVideo = true;
     } else if (node.nodeName == conf.ns.edit + ":flash") {
         this.dataInfo.hasFlash = true;
+    } else if (node.nodeName == conf.ns.edit + ":list_formatted") {
+        this.dataInfo.hasList = true;
+        this.dataInfo.hintText += " " + this.getTextContent(node);
     } else if (node.nodeName.substr(0, 10) == conf.ns.edit + ":text_") {
         this.dataInfo.hasText = true;
         if (node.nodeName == conf.ns.edit + ":text_headline") {
@@ -68,6 +71,7 @@ class_tree_icon.prototype.getIconType = function(node) {
         hasSource: false,
         hasText: false,
         hasLink: false,
+        hasList: false,
         hintText: ""
     }
 
@@ -91,6 +95,8 @@ class_tree_icon.prototype.getIconType = function(node) {
             this.datainfo.icon = "edit_headline";
         } else if (this.datainfo.hasText) {
             this.datainfo.icon = "edit_text";
+        } else if (this.datainfo.hasList) {
+            this.datainfo.icon = "edit_list";
         } else if (this.datainfo.hasImg) {
             this.datainfo.icon = "edit_img";
         } else if (this.datainfo.hasSource) {

@@ -1089,10 +1089,11 @@ TextField.prototype.prepareHtmlText = function(htmlString) {
     var newURL = "";
 
 	htmlString = htmlString.replace("<p />", "<p> </p>");
+	htmlString = htmlString.replace("<li />", "<li> </li>");
 	htmlString = htmlString.replace("<a", "<u><a");
 	htmlString = htmlString.replace("</a>", "</a></u>");
-    htmlString = htmlString.replace("<small>", "<font size=\"" + this.textFormatSmall.size + "\">");
-    htmlString = htmlString.replace("</small>", "</font>");
+        htmlString = htmlString.replace("<small>", "<font size=\"" + this.textFormatSmall.size + "\">");
+        htmlString = htmlString.replace("</small>", "</font>");
 
 	do {
 		//get link target
@@ -1128,7 +1129,8 @@ TextField.prototype.reducedHtmlText = function() {
     newStr = newStr.replace([
         ["<i></i>"	  , ""],
         ["<b></b>"	  , ""],
-        ["<small></small>", ""]
+        ["<small></small>", ""],
+        ["</ul><ul>", ""]
     ]);
     
     return newStr;
@@ -1146,6 +1148,9 @@ TextField.prototype.reducedHtmlXML = function(node) {
         if (nodeName == "p" || nodeName == "b" || nodeName == "i") {
             startTag = "<" + nodeName + ">";
             endTag = "</" + nodeName + ">";
+        } else if (nodeName == "li") {
+            startTag = "<ul><li>";
+            endTag = "</li></ul>";
         } else if (nodeName == "font") {
             if (node.attributes.size == conf.interface.textformat_input_small.size) {
                 startTag = "<small>";

@@ -901,6 +901,25 @@ _global.textlink = function(args) {
 // }}}
 
 /*
+ *	Class PropBox_edit_list_formatted
+ *
+ *	Extends class_propBox_edit_text_multiline
+ *	Handles HTML-formatted Textfields
+ */
+// {{{ constructor
+class_propBox_edit_list_formatted = function() {};
+class_propBox_edit_list_formatted.prototype = new class_propBox_edit_text_formatted();
+
+class_propBox_edit_list_formatted.prototype.propName[0] = conf.lang.prop_name_edit_list_formatted;
+// }}}
+// {{{ setTextBoxFormat()
+class_propBox_edit_list_formatted.prototype.setTextBoxFormat = function() {
+	this.textBox.html = true
+	this.textBox.textFormat = conf.interface.textformat_input_list;
+	this.textBox.textFormatSmall = conf.interface.textformat_input_list_small;
+};
+// }}}
+/*
  *	Class PropBox_edit_text_headline
  *
  *	Extends class_propBox_edit_text_multiline
@@ -5216,6 +5235,7 @@ Object.registerClass("prop_edit_text_multiline", class_propBox_edit_text_multili
 
 Object.registerClass("prop_edit_plain_source", class_propBox_edit_plain_source);
 Object.registerClass("prop_edit_text_formatted", class_propBox_edit_text_formatted);
+Object.registerClass("prop_edit_list_formatted", class_propBox_edit_list_formatted);
 Object.registerClass("prop_edit_text_headline", class_propBox_edit_text_headline);
 Object.registerClass("prop_edit_a", class_propBox_edit_a);
 Object.registerClass("prop_edit_img", class_propBox_edit_img);

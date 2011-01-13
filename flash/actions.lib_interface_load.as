@@ -188,6 +188,16 @@
 			lineSpacing	: conf.interface.font_linespacing
 		});
 
+		conf.interface.textformat_input_list = getTextFormat({
+			font		: conf.interface.font,
+			size		: conf.interface.font_size,
+			color		: conf.interface.color_input_font_active,
+			deviceFont	: conf.interface.font_device,
+			align		: "left",
+			lineSpacing	: conf.interface.font_linespacing,
+                        bullet          : true
+		});
+
 		conf.interface.textformat_input_active = getTextFormat({
 			font		: conf.interface.font,
 			size		: conf.interface.font_size,
@@ -225,6 +235,15 @@
 			deviceFont	: conf.interface.font_device,
 			align		: "left",
 			lineSpacing	: conf.interface.font_linespacing
+		});
+		conf.interface.textformat_input_list_small = getTextFormat({
+			font		: conf.interface.font,
+			size		: conf.interface.font_size - 2,
+			color		: conf.interface.color_input_font_active,
+			deviceFont	: conf.interface.font_device,
+			align		: "left",
+			lineSpacing	: conf.interface.font_linespacing,
+                        bullet          : true
 		});
 
 

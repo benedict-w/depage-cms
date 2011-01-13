@@ -141,6 +141,7 @@ $texts = array(
 	'prop_name_edit_plain_source' => "source code",
 	'prop_name_edit_table' => "table",
 	'prop_name_edit_text_formatted' => "text",
+	'prop_name_edit_list_formatted' => "list",
 	'prop_name_edit_text_headline' => "headline",
 	'prop_name_edit_time' => "time",
 	'prop_name_edit_type' => "type",

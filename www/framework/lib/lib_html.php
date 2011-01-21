@@ -419,6 +419,7 @@ class html {
         $h = "";
 
         $users = $project->user->get_loggedin_users();
+        // show only users which are allowed to edit the viewers projects
         if (count($users) > 0) {
             $h .= "<ul class=\"users\">";
             foreach($users as $u) {

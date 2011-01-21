@@ -17,7 +17,7 @@
     }
     // }}}
     // {{{ get_alternate_page()
-    function get_alternate_page($available_pages, $base_location, $request) {
+    function get_alternate_page($available_pages, $shortcuts, $base_location, $request) {
         $page = "";
 
         $base_location = parse_url($base_location);
@@ -31,9 +31,17 @@
         $request = explode("/", $request);
         
         // remove last element from path
-        array_pop($request);
+        //array_pop($request);
+        
+        // search for shortcuts
+        if (is_array($shortcuts)) {
+            if (isset($shortcuts[$request[0]])) {
+                $lang_location = get_language_by_browser($languages);
+                $page = "/" . $lang_location . "/" . $shortcuts[$request[0]];
+            }
+        }
 
-        //search for pages>>
+        //search for pages
         while ($page == "" && count($request) > 1) {
             $tempurl = implode("/", $request) . "/";
             foreach ($available_pages as $apage) {
@@ -57,4 +65,3 @@
     // }}}
 
     /* vim:set ft=php sw=4 sts=4 fdm=marker : */
-?>

@@ -835,29 +835,36 @@ class rpc_bgtask_functions extends rpc_functions_class {
 
         // generate autolang
         $autolang = file_get_contents("php/autolang_tpl.php");
-        $autolang .= "<" . "?php\n";
-            $autolang .= "\$languages = array(\n";
-                $autolang .= $args['languages'];
-            $autolang .= ");\n";
-            $autolang .= "\$pages = array(\n";
-                foreach ($pages as $page) {
-                    $autolang .= "    \"$page\",\n";
-                }
-            $autolang .= ");\n";
 
-            $autolang .= "\$base_location = \"$baseurl/\";\n";
+        $autolang .= "\$languages = array(\n";
+            $autolang .= $args['languages'];
+        $autolang .= ");\n";
+        $autolang .= "\$pages = array(\n";
+            foreach ($pages as $page) {
+                $autolang .= "    \"$page\",\n";
+            }
+        $autolang .= ");\n";
+        
+        // include project specific shortcuts 
+        $project_path = $project->get_project_path($this->project);
+        if (file_exists("{$project_path}/lib/shortcuts")) {
+            $autolang .= file_get_contents("{$project_path}/lib/shortcuts");
+        } else {
+            $autolang .= "\$shortcuts = '';";
+        }
 
-            $autolang .= "if (\$_GET['notfound'] != 'true') {\n";
-                $autolang .= "    \$lang_location = get_language_by_browser(\$languages);\n";
+        $autolang .= "\$base_location = \"$baseurl/\";\n";
 
-                $autolang .= "    \$document = \"{\$lang_location}$baselink\";\n";
-            $autolang .= "} else {\n";
-                $autolang .= "    \$document = get_alternate_page(\$pages, \$base_location, \$_SERVER['REQUEST_URI']);\n";
-            $autolang .= "}\n\n";
+        $autolang .= "if (\$_GET['notfound'] != 'true') {\n";
+            $autolang .= "    \$lang_location = get_language_by_browser(\$languages);\n";
 
-            $autolang .= "\$location = \"{\$base_location}{\$document}\";\n\n";
-            $autolang .= "header(\"Location: \$location\");\n";
-        $autolang .= "?" . ">";
+            $autolang .= "    \$document = \"{\$lang_location}$baselink\";\n";
+        $autolang .= "} else {\n";
+            $autolang .= "    \$document = get_alternate_page(\$pages, \$shortcuts, \$base_location, \$_SERVER['REQUEST_URI']);\n";
+        $autolang .= "}\n\n";
+
+        $autolang .= "\$location = \"{\$base_location}{\$document}\";\n\n";
+        $autolang .= "header(\"Location: \$location\");\n";
 
         $this->file_access->f_write_string($this->output_path . '/index.php', $autolang);
 

@@ -850,8 +850,9 @@ class rpc_bgtask_functions extends rpc_functions_class {
         if (file_exists("{$project_path}/lib/shortcuts")) {
             $autolang .= file_get_contents("{$project_path}/lib/shortcuts");
         } else {
-            $autolang .= "\$shortcuts = '';";
+            $autolang .= "\$shortcuts = null;";
         }
+        $autolang .= "\n\n";
 
         $autolang .= "\$base_location = \"$baseurl/\";\n";
 

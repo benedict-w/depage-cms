@@ -18,6 +18,8 @@
     // }}}
     // {{{ get_alternate_page()
     function get_alternate_page($available_pages, $shortcuts, $base_location, $request) {
+        global $languages;
+
         $page = "";
 
         $base_location = parse_url($base_location);
@@ -30,14 +32,11 @@
 
         $request = explode("/", $request);
         
-        // remove last element from path
-        //array_pop($request);
-        
         // search for shortcuts
         if (is_array($shortcuts)) {
-            if (isset($shortcuts[$request[0]])) {
+            if (isset($shortcuts[$request[1]])) {
                 $lang_location = get_language_by_browser($languages);
-                $page = "/" . $lang_location . "/" . $shortcuts[$request[0]];
+                $page = "/" . $lang_location . $shortcuts[$request[1]];
             }
         }
 

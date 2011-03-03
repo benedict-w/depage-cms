@@ -135,9 +135,14 @@
                         <xsl:value-of select="@href" disable-output-escaping="yes" />
                     </xsl:attribute>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="$href_id">
                     <xsl:attribute name="href">
                         <xsl:value-of select="$baseurl" /><xsl:value-of select="document(concat('pageref:/', @href_id, '/', $tt_lang))/." disable-output-escaping="yes" />
+                    </xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseurl" /><xsl:value-of select="document(concat(@href, '/', $tt_lang))/." disable-output-escaping="yes" />
                     </xsl:attribute>
                 </xsl:otherwise>
             </xsl:choose>

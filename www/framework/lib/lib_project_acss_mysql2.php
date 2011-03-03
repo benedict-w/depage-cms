@@ -1975,14 +1975,9 @@ class project_acss_mysql2 extends project {
         }
 
         $funcs = array();
-        //$funcs[] = new ttRpcFunc('publish_index_page', array('lang' => $output_languages[0]));
 
-        $languages = "";
-        foreach ($output_languages as $lang) {
-            $languages .= "\t'$lang',\n";
-        }
         $funcs[] = new ttRpcFunc('publish_htaccess', array(
-            'languages' => $languages,
+            'languages' => serialize($output_languages),
             'lang_num' => count($output_languages),
             'lang_default' => $output_languages[0],
             'baseurl' => $baseurl,

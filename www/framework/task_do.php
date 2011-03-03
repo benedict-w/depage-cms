@@ -773,29 +773,6 @@ class rpc_bgtask_functions extends rpc_functions_class {
         }
     }
     // }}}
-    // {{{ publish_index_page()
-    /**
-     * ----------------------------------------------
-     * publish_index_page
-     */ 
-    function publish_index_page($args) {
-        $args['task']->set_description('%task_publish_processing_indexes%');
-        
-        $this->xml_proc->isPreview = true;
-        $this->xml_proc->page_refs = array();
-        $this->xml_proc->actual_path = '/';
-        
-        $transformed = $this->xml_proc->generate_page_redirect($this->project, $this->template_set, $args['lang'], true);
-        
-        $this->file_access->f_write_string($this->output_path . '/index.html', $transformed['value']);
-
-        $htaccess = "";
-
-        $htaccess .= "AddCharset UTF-8 .html\n";
-
-        $this->file_access->f_write_string($this->output_path . '/.htaccess', $htaccess);
-    }
-    // }}}
     // {{{ publish_htaccess()
     /**
      * ----------------------------------------------
@@ -803,6 +780,8 @@ class rpc_bgtask_functions extends rpc_functions_class {
      */ 
     function publish_htaccess($args) {
         global $project, $log;
+
+        $languages = unserialize($args['languages']);
         
         // get base-page
         $page_struct = $project->get_page_struct($this->project);
@@ -837,7 +816,9 @@ class rpc_bgtask_functions extends rpc_functions_class {
         $autolang = file_get_contents("php/autolang_tpl.php");
 
         $autolang .= "\$languages = array(\n";
-            $autolang .= $args['languages'];
+            foreach ($languages as $lang) {
+                $autolang .= "\t'$lang',\n";
+            }
         $autolang .= ");\n";
         $autolang .= "\$pages = array(\n";
             foreach ($pages as $page) {
@@ -926,10 +907,11 @@ class rpc_bgtask_functions extends rpc_functions_class {
         }
 
         if ($args['mod_rewrite'] == "true") {
+            $folders = implode("|", $languages) . "|lib";
             // redirect all pages that are not found to index-page
             // this has to be the last rules for custom rewrite-rules to work
             $htaccess .= "RewriteCond         %{REQUEST_FILENAME}      !-s\n";
-            $htaccess .= "RewriteRule         ^(.*)$                   index.php?notfound=true [L]\n\n";
+            $htaccess .= "RewriteRule         ^($folders)/(.*)$    index.php?notfound=true [L]\n\n";
         }
 
         @$this->file_access->f_write_string($this->output_path . '/.htaccess', $htaccess);

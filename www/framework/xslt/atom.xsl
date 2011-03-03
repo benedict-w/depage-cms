@@ -118,61 +118,64 @@
         <xsl:param name="onMouseOut" select="@onMouseOut"/>
         <xsl:param name="lang" select="$tt_lang"/>
 
-        <xsl:if test="@lang = '' or @lang = $tt_lang">
-            <!-- get name from meta-information if link is ref to page_id -->
-            <xsl:variable name="linkdesc"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:linkdesc[@lang = $lang]/@value"/></xsl:if></xsl:variable>
-            <xsl:variable name="title"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:title[@lang = $lang]/@value"/></xsl:if></xsl:variable>
+        <!-- get name from meta-information if link is ref to page_id -->
+        <xsl:variable name="linkdesc"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:linkdesc[@lang = $lang]/@value"/></xsl:if></xsl:variable>
+        <xsl:variable name="title"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:title[@lang = $lang]/@value"/></xsl:if></xsl:variable>
 
-            <a>
-                <!-- {{{ href -->
-                <xsl:choose>
-                    <xsl:when test="$href and substring($href, 1, 8) = 'libref:/'">
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$baseurl" />lib<xsl:value-of select="substring(@href,8)" disable-output-escaping="yes" />
-                        </xsl:attribute>
-                    </xsl:when>
-                    <xsl:when test="$href and not(substring($href, 1, 8) = 'pageref:')">
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="@href" disable-output-escaping="yes" />
-                        </xsl:attribute>
-                    </xsl:when>
-                    <xsl:when test="$href_id">
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$baseurl" /><xsl:value-of select="document(concat('pageref:/', @href_id, '/', $tt_lang))/." disable-output-escaping="yes" />
-                        </xsl:attribute>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$baseurl" /><xsl:value-of select="document($href)/." disable-output-escaping="yes" />
-                        </xsl:attribute>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <!-- }}} -->
-                <!-- {{{ attributes -->
-                <xsl:if test="$lang">
-                    <xsl:attribute name="hreflang"><xsl:value-of select="$lang"/></xsl:attribute>
-                </xsl:if>
-                <!-- }}} -->
-                <!-- {{{ content -->
-                <xsl:value-of select="$pretext" disable-output-escaping="yes" />
-                <xsl:choose>
-                    <xsl:when test="$content != '' and not($justapply)">
-                        <xsl:value-of select="$content"/>
-                    </xsl:when>
-                    <xsl:when test="$href_id and not($linkdesc = '') and not($justapply)">
-                        <xsl:value-of select="$linkdesc"/>
-                    </xsl:when>
-                    <xsl:when test="$altcontent != '' and not($justapply)">
-                        <xsl:value-of select="$altcontent"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates/>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="$aptext" disable-output-escaping="yes" />
-                <!-- }}} -->
-            </a>
-        </xsl:if>
+        <a>
+            <!-- {{{ href -->
+            <xsl:choose>
+                <xsl:when test="$href and substring($href, 1, 8) = 'libref:/'">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseurl" />lib<xsl:value-of select="substring(@href,8)" disable-output-escaping="yes" />
+                    </xsl:attribute>
+                </xsl:when>
+                <xsl:when test="@href and substring($href, 1, 7) = 'mailto:'">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$href" disable-output-escaping="yes"/>
+                    </xsl:attribute>
+                </xsl:when>
+                <xsl:when test="$href and substring($href, 1, 8) = 'pageref:'">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseurl" /><xsl:value-of select="document(concat($href, '/', $lang))/." disable-output-escaping="yes"/>
+                    </xsl:attribute>
+                </xsl:when>
+                <xsl:when test="$href_id != ''">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseurl" /><xsl:value-of select="document(concat('pageref:/', $href_id, '/', $lang))/." disable-output-escaping="yes"/>
+                    </xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$href" disable-output-escaping="yes"/>
+                    </xsl:attribute>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- }}} -->
+            <!-- {{{ attributes -->
+            <xsl:if test="$lang">
+                <xsl:attribute name="hreflang"><xsl:value-of select="$lang"/></xsl:attribute>
+            </xsl:if>
+            <!-- }}} -->
+            <!-- {{{ content -->
+            <xsl:value-of select="$pretext" disable-output-escaping="yes" />
+            <xsl:choose>
+                <xsl:when test="$content != '' and not($justapply)">
+                    <xsl:value-of select="$content"/>
+                </xsl:when>
+                <xsl:when test="$href_id and not($linkdesc = '') and not($justapply)">
+                    <xsl:value-of select="$linkdesc"/>
+                </xsl:when>
+                <xsl:when test="$altcontent != '' and not($justapply)">
+                    <xsl:value-of select="$altcontent"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="$aptext" disable-output-escaping="yes" />
+            <!-- }}} -->
+        </a>
     </xsl:template>
     <!-- }}} -->
 
@@ -183,27 +186,22 @@
     <!-- }}} -->
     <!-- {{{ a -->
     <xsl:template match="a">
-        <a>
-            <xsl:choose>
-                <xsl:when test="@href and substring(@href, 1, 8) = 'libref:/'">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="$baseurl" />lib<xsl:value-of select="substring(@href,8)" disable-output-escaping="yes" />
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:when test="@href and not(substring(@href, 1, 8) = 'pageref:')">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="@href" disable-output-escaping="yes" />
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="$baseurl" /><xsl:value-of select="document(concat('pageref:/', @href_id, '/', $tt_lang))/." disable-output-escaping="yes" />
-                    </xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:apply-templates />
-            <xsl:text> </xsl:text>
-        </a>
+        <xsl:choose>
+            <xsl:when test="substring(@href,1,8) = 'pageref:'">
+                <xsl:call-template name="edit:a">
+                    <xsl:with-param name="justapply" select="true()" />
+                    <xsl:with-param name="href_id" select="substring(@href,9)" />
+                    <xsl:with-param name="target" select="@target" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="edit:a">
+                    <xsl:with-param name="justapply" select="true()" />
+                    <xsl:with-param name="href" select="@href" />
+                    <xsl:with-param name="target" select="@target" />
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     <!-- }}} -->
     <!-- {{{ b -->

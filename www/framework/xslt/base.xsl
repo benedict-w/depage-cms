@@ -23,108 +23,110 @@
         <xsl:param name="onMouseOut" select="@onMouseOut"/>
         <xsl:param name="lang" select="$tt_lang"/>
 
-        <!-- get name from meta-information if link is ref to page_id -->
-        <xsl:variable name="linkdesc"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:linkdesc[@lang = $lang]/@value"/></xsl:if></xsl:variable>
-        <xsl:variable name="title"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:title[@lang = $lang]/@value"/></xsl:if></xsl:variable>
+        <xsl:if test="@lang = $lang or not(@lang)">
+            <!-- get name from meta-information if link is ref to page_id -->
+            <xsl:variable name="linkdesc"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:linkdesc[@lang = $lang]/@value"/></xsl:if></xsl:variable>
+            <xsl:variable name="title"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:title[@lang = $lang]/@value"/></xsl:if></xsl:variable>
 
-        <xsl:if test="name(../..) = 'sec:unordered_list'">
-            <xsl:text disable-output-escaping="yes">&lt;li&gt;&lt;p&gt;</xsl:text>
-        </xsl:if>
-        <xsl:if test="name(../..) = 'sec:vcard'">
-            <xsl:text disable-output-escaping="yes">&lt;p&gt;</xsl:text>
-        </xsl:if>
+            <xsl:if test="name(../..) = 'sec:unordered_list'">
+                <xsl:text disable-output-escaping="yes">&lt;li&gt;&lt;p&gt;</xsl:text>
+            </xsl:if>
+            <xsl:if test="name(../..) = 'sec:vcard'">
+                <xsl:text disable-output-escaping="yes">&lt;p&gt;</xsl:text>
+            </xsl:if>
 
-        <a>
-            <!-- {{{ href -->
-            <xsl:choose>
-                <xsl:when test="$href and substring($href, 1, 8) = 'libref:/'">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="document($href)/." disable-output-escaping="yes"/>
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:when test="@href and substring($href, 1, 7) = 'mailto:'">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="$href" disable-output-escaping="yes"/>
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:when test="$href and substring($href, 1, 8) = 'pageref:'">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="document(concat($href, '/', $lang))/." disable-output-escaping="yes"/>
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:when test="$href_id != ''">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="document(concat('pageref:/', $href_id, '/', $lang))/." disable-output-escaping="yes"/>
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="$href" disable-output-escaping="yes"/>
-                    </xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- }}} -->
-            <!-- {{{ attributes -->
-            <xsl:if test="$lang">
-                <xsl:attribute name="hreflang"><xsl:value-of select="$lang"/></xsl:attribute>
+            <a>
+                <!-- {{{ href -->
+                <xsl:choose>
+                    <xsl:when test="$href and substring($href, 1, 8) = 'libref:/'">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="document($href)/." disable-output-escaping="yes"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:when test="@href and substring($href, 1, 7) = 'mailto:'">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$href" disable-output-escaping="yes"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:when test="$href and substring($href, 1, 8) = 'pageref:'">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="document(concat($href, '/', $lang))/." disable-output-escaping="yes"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:when test="$href_id != ''">
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="document(concat('pageref:/', $href_id, '/', $lang))/." disable-output-escaping="yes"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$href" disable-output-escaping="yes"/>
+                        </xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- }}} -->
+                <!-- {{{ attributes -->
+                <xsl:if test="$lang">
+                    <xsl:attribute name="hreflang"><xsl:value-of select="$lang"/></xsl:attribute>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$target != ''">
+                        <xsl:attribute name="target"><xsl:value-of select="$target"/></xsl:attribute>
+                    </xsl:when>
+                    <xsl:when test="@href and (substring($href, 1, 5) = 'http:' or substring($href, 1, 6) = 'https:')">
+                        <xsl:attribute name="target">_blank</xsl:attribute>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:if test="$class != '' or $redirect != ''">
+                    <xsl:attribute name="class"><xsl:value-of select="$class"/><xsl:if test="$redirect != ''"> redirect</xsl:if></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$id != ''">
+                    <xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$type != ''">
+                    <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$rel != ''">
+                    <xsl:attribute name="rel"><xsl:value-of select="$rel"/></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$title != ''">
+                    <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$onFocus != ''">
+                    <xsl:attribute name="onFocus"><xsl:value-of select="$onFocus"/></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$onMouseOver != ''">
+                    <xsl:attribute name="onMouseOver"><xsl:value-of select="$onMouseOver"/></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$onMouseOut != ''">
+                    <xsl:attribute name="onMouseOut"><xsl:value-of select="$onMouseOut"/></xsl:attribute>
+                </xsl:if>
+                <!-- }}} -->
+                <!-- {{{ content -->
+                <xsl:value-of select="$pretext" disable-output-escaping="yes" />
+                <xsl:choose>
+                    <xsl:when test="$content != '' and not($justapply)">
+                        <xsl:value-of select="$content"/>
+                    </xsl:when>
+                    <xsl:when test="$href_id and not($linkdesc = '') and not($justapply)">
+                        <xsl:value-of select="$linkdesc"/>
+                    </xsl:when>
+                    <xsl:when test="$altcontent != '' and not($justapply)">
+                        <xsl:value-of select="$altcontent"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="$aptext" disable-output-escaping="yes" />
+                <!-- }}} -->
+            </a>
+            <xsl:if test="name(../..) = 'sec:vcard'">
+                <xsl:text disable-output-escaping="yes">&lt;/p&gt;</xsl:text>
             </xsl:if>
-            <xsl:choose>
-                <xsl:when test="$target != ''">
-                    <xsl:attribute name="target"><xsl:value-of select="$target"/></xsl:attribute>
-                </xsl:when>
-                <xsl:when test="@href and (substring($href, 1, 5) = 'http:' or substring($href, 1, 6) = 'https:')">
-                    <xsl:attribute name="target">_blank</xsl:attribute>
-                </xsl:when>
-            </xsl:choose>
-            <xsl:if test="$class != '' or $redirect != ''">
-                <xsl:attribute name="class"><xsl:value-of select="$class"/><xsl:if test="$redirect != ''"> redirect</xsl:if></xsl:attribute>
+            <xsl:if test="name(../..) = 'sec:unordered_list'">
+                <xsl:text disable-output-escaping="yes">&lt;/p&gt;&lt;/li&gt;</xsl:text>
             </xsl:if>
-            <xsl:if test="$id != ''">
-                <xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$type != ''">
-                <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$rel != ''">
-                <xsl:attribute name="rel"><xsl:value-of select="$rel"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$title != ''">
-                <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$onFocus != ''">
-                <xsl:attribute name="onFocus"><xsl:value-of select="$onFocus"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$onMouseOver != ''">
-                <xsl:attribute name="onMouseOver"><xsl:value-of select="$onMouseOver"/></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$onMouseOut != ''">
-                <xsl:attribute name="onMouseOut"><xsl:value-of select="$onMouseOut"/></xsl:attribute>
-            </xsl:if>
-            <!-- }}} -->
-            <!-- {{{ content -->
-            <xsl:value-of select="$pretext" disable-output-escaping="yes" />
-            <xsl:choose>
-                <xsl:when test="$content != '' and not($justapply)">
-                    <xsl:value-of select="$content"/>
-                </xsl:when>
-                <xsl:when test="$href_id and not($linkdesc = '') and not($justapply)">
-                    <xsl:value-of select="$linkdesc"/>
-                </xsl:when>
-                <xsl:when test="$altcontent != '' and not($justapply)">
-                    <xsl:value-of select="$altcontent"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates/>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:value-of select="$aptext" disable-output-escaping="yes" />
-            <!-- }}} -->
-        </a>
-        <xsl:if test="name(../..) = 'sec:vcard'">
-            <xsl:text disable-output-escaping="yes">&lt;/p&gt;</xsl:text>
-        </xsl:if>
-        <xsl:if test="name(../..) = 'sec:unordered_list'">
-            <xsl:text disable-output-escaping="yes">&lt;/p&gt;&lt;/li&gt;</xsl:text>
         </xsl:if>
     </xsl:template>
     <!-- }}} -->

@@ -27,8 +27,11 @@
         <xsl:variable name="linkdesc"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:linkdesc[@lang = $lang]/@value"/></xsl:if></xsl:variable>
         <xsl:variable name="title"><xsl:if test="$href_id"><xsl:value-of select="document(concat('get:page/', $href_id))//*/pg:meta/pg:title[@lang = $lang]/@value"/></xsl:if></xsl:variable>
 
-        <xsl:if test="name(../..) = 'sec:unordered_list' ">
-            <xsl:text disable-output-escaping="yes">&lt;li&gt;</xsl:text>
+        <xsl:if test="name(../..) = 'sec:unordered_list'">
+            <xsl:text disable-output-escaping="yes">&lt;li&gt;&lt;p&gt;</xsl:text>
+        </xsl:if>
+        <xsl:if test="name(../..) = 'sec:vcard'">
+            <xsl:text disable-output-escaping="yes">&lt;p&gt;</xsl:text>
         </xsl:if>
 
         <a>
@@ -117,8 +120,11 @@
             <xsl:value-of select="$aptext" disable-output-escaping="yes" />
             <!-- }}} -->
         </a>
-        <xsl:if test="name(../..) = 'sec:unordered_list' ">
-            <xsl:text disable-output-escaping="yes">&lt;/li&gt;</xsl:text>
+        <xsl:if test="name(../..) = 'sec:vcard'">
+            <xsl:text disable-output-escaping="yes">&lt;/p&gt;</xsl:text>
+        </xsl:if>
+        <xsl:if test="name(../..) = 'sec:unordered_list'">
+            <xsl:text disable-output-escaping="yes">&lt;/p&gt;&lt;/li&gt;</xsl:text>
         </xsl:if>
     </xsl:template>
     <!-- }}} -->

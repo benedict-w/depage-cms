@@ -1867,6 +1867,7 @@ class_propBox_pg_navigation.prototype.setData = function() {
 	var i, tempNode;
 	
 	super.setData();
+        this.setTitle(conf.lang.prop_name_page_navigation);
 	
 	for (var i = 1; i <= this.navigations.length; i++) {
 		this["checkBox" + i].caption = this.navigations[i - 1].name;
@@ -1970,6 +1971,7 @@ class_propBox_pg_file.prototype.setData = function() {
 		var i;
 
 		super.setData();
+                this.setTitle(conf.lang.prop_name_page_file);
 
 		for (var i = 0; i < this.comboBox.values.length; i++) {
 			if (this.comboBox.values[i] == this.data.attributes.file_type) {

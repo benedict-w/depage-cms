@@ -121,7 +121,7 @@ class_propBox.prototype.setMultilangProp = function() {
 // }}}
 // {{{ setTitle()
 class_propBox.prototype.setTitle = function(newTitle) {
-	if (this.data.attributes.lang != undefined && this.data.attributes.lang != "" && this.data.attributes.lang == conf.project.tree.settings.languages[0].shortname) {
+	if (this.data.attributes.lang == undefined || this.data.attributes.lang == "" || this.data.attributes.lang == conf.project.tree.settings.languages[0].shortname) {
             this.propName[0] = newTitle;
             this.back.setTitle();
         }
@@ -133,7 +133,9 @@ class_propBox.prototype.setData = function() {
 	if (this.data.attributes[conf.ns.database + ":name"] != undefined) {
 		var newTitle = "%" + this.data.attributes[conf.ns.database + ":name"] + "%";
 		this.setTitle(newTitle.replaceInterfaceTexts());
-	}
+	} else if (this.data.attributes["name"] != undefined) {
+            this.setTitle(this.data.attributes["name"]);
+        }
 	this.isChanged = false;
 };
 // }}}
@@ -315,10 +317,6 @@ class_propBox_edit_text_singleline.prototype.setData = function() {
 	
 	this.setMultilangProp();
 	
-	if (this.data.attributes.name != undefined && this.data.attributes.name != "") {
-		this.setTitle(this.data.attributes.name);
-	}
-
 	this.inputBox.value = this.data.attributes.value;
 };
 // }}}
@@ -714,10 +712,6 @@ class_propBox_edit_text_formatted.prototype.setData = function() {
 	
 	this.setMultilangProp();
 	
-	if (this.data.attributes.name != undefined && this.data.attributes.name != "") {
-		this.setTitle(this.data.attributes.name);
-	}
-
 	tempText = "";
 	for (var i = 0; i < this.data.childNodes.length; i++) {
 		this.data.childNodes[i].stripXMLDbIds();
@@ -947,10 +941,6 @@ class_propBox_edit_text_headline.prototype.setData = function() {
 	
 	this.setMultilangProp();
 
-	if (this.data.attributes.name != undefined && this.data.attributes.name != "") {
-		this.setTitle(this.data.attributes.name);
-	}
-	
 	tempText = "";
 	for (var i = 0; i < this.data.childNodes.length; i++) {
 		this.data.childNodes[i].stripXMLDbIds();
@@ -1375,10 +1365,6 @@ class_propBox_edit_table.prototype.setData = function() {
 	
 	this.setMultilangProp();
 	
-	if (this.data.attributes.name != undefined && this.data.attributes.name != "") {
-		this.setTitle(this.data.attributes.name);
-	}
-
         this.removeTableCells();
 	setTimeout(this.generateTableCells, this, 1, [], false);
 };
@@ -1490,10 +1476,6 @@ class_propBox_edit_type.prototype.generateComponents = function() {
 // {{{ setData()
 class_propBox_edit_type.prototype.setData = function() {
 	super.setData();
-
-	if (this.data.attributes.name != undefined && this.data.attributes.name != "") {
-		this.setTitle(this.data.attributes.name);
-	}
 
         setTimeout(this.setDataNow, this, 10, [tempText]);
 };

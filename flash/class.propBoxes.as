@@ -904,6 +904,7 @@ _global.textlink = function(args) {
 class_propBox_edit_list_formatted = function() {};
 class_propBox_edit_list_formatted.prototype = new class_propBox_edit_text_formatted();
 
+class_propBox_edit_list_formatted.prototype.propName = [];
 class_propBox_edit_list_formatted.prototype.propName[0] = conf.lang.prop_name_edit_list_formatted;
 // }}}
 // {{{ setTextBoxFormat()

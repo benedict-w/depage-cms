@@ -1323,10 +1323,15 @@ function urlSchemeHandler($processor, $scheme, $param) {
             $value = "<version>" . htmlspecialchars($conf->app_name . " " . $conf->app_version) . "</version>";
         }
     } else if ($scheme == $conf->url_page_scheme_intern) {
-        list($id, $param) = explode('/', trim($param, '/'), 2);
+        list($id, $param, $absolute) = explode('/', trim($param, '/'), 3);
 
         $target_path = $xml_proc->get_path_by_id($id, $param, $xml_proc->project);
-        $value_path = $xml_proc->get_relative_path_to($target_path);
+
+        if ($absolute != "absolute") {
+            $value_path = $xml_proc->get_relative_path_to($target_path);
+        } else {
+            $value_path = $target_path;
+        }
         
         $value = '<page_ref>' . htmlspecialchars($value_path) . '</page_ref>';
     } else if ($scheme == $conf->url_lib_scheme_intern) {

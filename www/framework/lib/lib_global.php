@@ -32,6 +32,8 @@ class config {
      * @public
      */
     function config($file) {
+        ini_set('display_errors', "off");
+
         if (is_callable("mb_internal_encoding")) {
             $this->encoding = "UTF-8";
 
@@ -50,7 +52,7 @@ class config {
         $inifile = parse_ini_file($this->settingsPath . $file, false);
         
         $this->app_name = 'depage::cms';
-        $this->app_version = '1.1.20';
+        $this->app_version = '1.1.21';
         $this->app_copyright = "(c) 2002-2011 by <a href=\"http://www.depage.net\" target=\"_blank\">depage.net / frank hellenkamp</a>";
         $this->app_license = 'This software is released under MIT and GPL2 licenses';
 

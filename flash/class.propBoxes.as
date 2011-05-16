@@ -25,7 +25,7 @@ class_propBox.prototype.onLoad = function() {
 	
 	this.settings = {
 		border				: 5,
-		gridSize			: 20,
+		gridSize			: 25,
 		minInnerHeight		: 23
 	};
 	this.settings.explanationWidth = 6 * this.settings.gridSize;
@@ -2702,6 +2702,7 @@ class_propBox_edit_img.prototype = new class_propBox();
 
 class_propBox_edit_img.prototype.propName = [];
 class_propBox_edit_img.prototype.propName[0] = conf.lang.prop_name_edit_img;
+class_propBox_edit_img.prototype.isImageProp = true;
 // }}}
 // {{{ onResize()
 class_propBox_edit_img.prototype.onResize = function() {
@@ -2875,6 +2876,8 @@ class_propBox_edit_img.prototype.setComponents = function() {
 // {{{ setData()
 class_propBox_edit_img.prototype.setData = function() {
 	super.setData();
+
+        this.setMultilangProp();
 	
 	this.inputBox.value = this.data.attributes.src;
 	this.inputBox.explain = conf.lang.prop_tt_img_filepath;

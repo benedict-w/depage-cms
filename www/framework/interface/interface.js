@@ -1,12 +1,13 @@
 /* {{{ open_edit */
 function open_edit(project, page) {
-    h = 600;
-    w = 770;
-    x = screen.availWidth - 20 - w;
-    y = screen.availHeight - 60 - h;
+    var h = 600;
+    var w = 820;
+    var x = screen.availWidth - 20 - w;
+    var y = screen.availHeight - 60 - h;
 
-    options = "height=" + h + ",width=" + w + ",fullscreen=0,dependent=0,location=0,menubar=0,resizable=1,scrollbars=0,status=1,titlebar=0,toolbar=0,screenX=" + x + ",screenY=" + y + ",left=" + x + ",top=" + y;
-    url = document.location.protocol + "//" + document.location.host + document.location.pathname.replace(/index\.php/, "") + "framework/interface/interface.php?standalone=false&project_name=" + project + "&page=" + escape(page);
+    var options = "height=" + h + ",width=" + w + ",fullscreen=0,dependent=0,location=0,menubar=0,resizable=1,scrollbars=0,status=1,titlebar=0,toolbar=0,screenX=" + x + ",screenY=" + y + ",left=" + x + ",top=" + y;
+    var url = document.location.protocol + "//" + document.location.host + document.location.pathname.replace(/index\.php/, "") + "framework/interface/interface.php?standalone=false&project_name=" + project + "&page=" + escape(page);
+
     flashwin = open(url, "tt" + project, options);
     if (!flashwin) {
         // @todo localisation

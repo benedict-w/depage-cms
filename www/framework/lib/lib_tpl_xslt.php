@@ -1336,10 +1336,15 @@ function urlSchemeHandler($processor, $scheme, $param) {
         
         $value = '<page_ref>' . htmlspecialchars($value_path) . '</page_ref>';
     } else if ($scheme == $conf->url_lib_scheme_intern) {
+        list($param, $absolute) = explode('#', $param, 2);
         list($param, $argstr) = explode('?', $param, 2);
 
         // path to file
-        $tmp_path = $xml_proc->get_relative_path_to('/lib/' . trim($param, '/'));
+        if ($absolute = "absolute") {
+            $tmp_path = '/lib/' . trim($param, '/');
+        } else {
+            $tmp_path = $xml_proc->get_relative_path_to('/lib/' . trim($param, '/'));
+        }
 
         // make references in parameters relative
         $args = explode('&', $argstr);

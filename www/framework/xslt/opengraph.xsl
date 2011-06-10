@@ -24,7 +24,7 @@
 
     <xsl:variable name="imageurl">
         <xsl:choose>
-            <xsl:when test="starts-with($image, 'libref:')"><xsl:value-of select="document($image)/." /></xsl:when>
+            <xsl:when test="starts-with($image, 'libref:')"><xsl:value-of select="concat($baseurl, substring(document($image)/., 2))" /></xsl:when>
             <xsl:otherwise><xsl:value-of select="$image" /></xsl:otherwise>
         </xsl:choose>
         <!-- @todo automatically look for libref and adjust accordingly -->

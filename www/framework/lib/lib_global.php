@@ -215,14 +215,14 @@ class config {
         // set global namespaces
         // (name | (ns | uri))
         $this->ns = Array(
-            'xsl' => array(ns => 'xsl', uri => "http://www.w3.org/1999/XSL/Transform"),
-            'rpc' => array(ns => 'rpc', uri => "http://{$this->home_url}/ns/rpc"),
-            'database' => array(ns => 'db', uri => "http://{$this->home_url}/ns/database"),
-            'project' => array(ns => 'proj', uri => "http://{$this->home_url}/ns/project"),
-            'page' => array(ns => 'pg', uri => "http://{$this->home_url}/ns/page"),
-            'section' => array(ns => 'sec', uri => "http://{$this->home_url}/ns/section"),
-            'edit' => array(ns => 'edit', uri => "http://{$this->home_url}/ns/edit"),
-            'backup' => array(ns => 'backup', uri => "http://{$this->home_url}/ns/backup"),
+            'xsl' => array('ns' => 'xsl', 'uri' => "http://www.w3.org/1999/XSL/Transform"),
+            'rpc' => array('ns' => 'rpc', 'uri' => "http://{$this->home_url}/ns/rpc"),
+            'database' => array('ns' => 'db', 'uri' => "http://{$this->home_url}/ns/database"),
+            'project' => array('ns' => 'proj', 'uri' => "http://{$this->home_url}/ns/project"),
+            'page' => array('ns' => 'pg', 'uri' => "http://{$this->home_url}/ns/page"),
+            'section' => array('ns' => 'sec', 'uri' => "http://{$this->home_url}/ns/section"),
+            'edit' => array('ns' => 'edit', 'uri' => "http://{$this->home_url}/ns/edit"),
+            'backup' => array('ns' => 'backup', 'uri' => "http://{$this->home_url}/ns/backup"),
         );
         
         // available outputtypes
@@ -298,7 +298,13 @@ class config {
                 'de',
             );
         }
-        $browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);    
+        $this->interface_language = $available_languages[0];
+
+        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            $browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);    
+        } else {
+            $browser_languages = array();
+        }
         foreach ($browser_languages as $lang) {
             $actual_language_array = explode(';', $lang);
             $actual_language_array = explode('-', $actual_language_array[0]);

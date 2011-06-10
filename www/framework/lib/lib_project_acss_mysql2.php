@@ -1928,6 +1928,7 @@ class project_acss_mysql2 extends project {
                     'lang' => $output_language,
                     'publish_id' => $publish_id,
                     'mod_rewrite' => $mod_rewrite,
+                    'baseurl' => $baseurl,
                 ));
             }
         }

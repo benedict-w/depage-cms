@@ -148,10 +148,13 @@ if ($param['project'] != "") {
             } else {
                 $data['lang'] = $param['lang'];
             }
+            $baseurl = 'http://' . $_SERVER['HTTP_HOST'] . $conf->path_projects . '/' . $project_name . '/preview/' . $param['type'] . '/';
             if (!$param['cached']) {
-                $transformed = $xml_proc->transform($project_name, $param['type'], $id, $param['lang'], $param['cached']);
+                $basurl .= 'noncached/';
+                $transformed = $xml_proc->transform($project_name, $param['type'], $id, $param['lang'], $baseurl, $param['cached']);
             } else if (($transformed = $xml_proc->get_from_transform_cache($project_name, $param['type'], $id, $param['lang'], $param['access'])) === false) {
-                $transformed = $xml_proc->transform($project_name, $param['type'], $id, $param['lang'], $param['cached']);
+                $basurl .= 'cached/';
+                $transformed = $xml_proc->transform($project_name, $param['type'], $id, $param['lang'], $baseurl, $param['cached']);
                 if ($transformed != false) {
                     $xml_proc->add_to_transform_cache($project_name, $param['type'], $id, $param['lang'], $param['access'], $transformed, $xml_proc->ids_used);
                 }

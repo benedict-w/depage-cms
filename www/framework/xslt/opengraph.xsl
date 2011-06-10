@@ -27,13 +27,28 @@
             <xsl:when test="starts-with($image, 'libref:')"><xsl:value-of select="concat($baseurl, substring(document($image)/., 2))" /></xsl:when>
             <xsl:otherwise><xsl:value-of select="$image" /></xsl:otherwise>
         </xsl:choose>
-        <!-- @todo automatically look for libref and adjust accordingly -->
     </xsl:variable>
 
 
     <meta property="og:title"><xsl:attribute name="content"><xsl:value-of select="$title" /></xsl:attribute></meta>
     <meta property="og:type"><xsl:attribute name="content"><xsl:value-of select="$type" /></xsl:attribute></meta>
+
+    <xsl:text disable-output-escaping="yes">
+        &lt;!--&lt;?php
+            $url = "http://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+            echo("-" . "-&gt;");
+            echo("&lt;meta property=\"og:url\" content=\"$url\"&gt;");
+            echo("&lt;!-" . "-;");
+            if (false) {
+        ?&gt;--&gt;
+    </xsl:text>
     <meta property="og:url"><xsl:attribute name="content"><xsl:value-of select="$url" /></xsl:attribute></meta>
+    <xsl:text disable-output-escaping="yes">
+        &lt;!--&lt;?php
+            }
+        ?&gt;--&gt;
+    </xsl:text>
+    
     <meta property="og:site_name"><xsl:attribute name="content"><xsl:value-of select="$sitename" /></xsl:attribute></meta>
     <xsl:if test="$userid != ''">
         <meta property="fb:admins"><xsl:attribute name="content"><xsl:value-of select="$userid" /></xsl:attribute></meta>

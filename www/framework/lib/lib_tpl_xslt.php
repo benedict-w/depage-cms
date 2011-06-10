@@ -1340,7 +1340,7 @@ function urlSchemeHandler($processor, $scheme, $param) {
         list($param, $argstr) = explode('?', $param, 2);
 
         // path to file
-        if ($absolute = "absolute") {
+        if ($absolute == "absolute") {
             $tmp_path = '/lib/' . trim($param, '/');
         } else {
             $tmp_path = $xml_proc->get_relative_path_to('/lib/' . trim($param, '/'));

@@ -378,6 +378,10 @@ class tpl_engine_xslt extends tpl_engine {
             $this->content_encoding = $tempNode->get_attribute('encoding');
             $this->content_type = $this->methods[$this->method];
         
+            if (substr($baseurl, -1) != "/") {
+                $baseurl .= "/";
+            }
+
             //set variables
             $this->variables = array(
                 'tt_actual_id' => "'{$this->id}'",

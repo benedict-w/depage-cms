@@ -6,6 +6,7 @@
 <!-- {{{ Google Analytics -->
 <xsl:template name="opengraph">		
     <xsl:param name="title">
+        <!-- get title from meta -->
         <xsl:choose>
             <xsl:when test="$tt_multilang = 'true' and //pg:meta/pg:title[@lang = $tt_lang]/@value != '' "><xsl:value-of select="//pg:meta/pg:title[@lang = $tt_lang]/@value"/></xsl:when>
             <xsl:when test="$tt_multilang = 'true' and //pg:meta/pg:linkdesc[@lang = $tt_lang]/@value != '' "><xsl:value-of select="//pg:meta/pg:linkdesc[@lang = $tt_lang]/@value"/></xsl:when>
@@ -21,6 +22,14 @@
     <xsl:param name="description"><xsl:value-of select="//pg:meta/pg:desc[@lang = $tt_lang]/@value"/></xsl:param>
     <xsl:param name="image"></xsl:param>
 
+    <xsl:variable name="imageurl">
+        <xsl:choose>
+            <xsl:when test="starts-with($image, 'libref:')"><xsl:value-of select="document($image)/." /></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$image" /></xsl:otherwise>
+        </xsl:choose>
+        <!-- @todo automatically look for libref and adjust accordingly -->
+    </xsl:variable>
+
 
     <meta property="og:title"><xsl:attribute name="content"><xsl:value-of select="$title" /></xsl:attribute></meta>
     <meta property="og:type"><xsl:attribute name="content"><xsl:value-of select="$type" /></xsl:attribute></meta>
@@ -33,7 +42,7 @@
         <meta property="og:description"><xsl:attribute name="content"><xsl:value-of select="$description" /></xsl:attribute></meta>
     </xsl:if>
     <xsl:if test="$image != ''">
-        <meta property="og:image"><xsl:attribute name="content"><xsl:value-of select="$image" /></xsl:attribute></meta>
+        <meta property="og:image"><xsl:attribute name="content"><xsl:value-of select="$imageurl" /></xsl:attribute></meta>
     </xsl:if>
 </xsl:template>
 <!-- }}} -->

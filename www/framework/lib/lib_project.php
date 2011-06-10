@@ -314,6 +314,7 @@ class project {
             "Keywords" => "",
             "ga-Account" => "",
             "ga-Domain" => "",
+            "fb-Account" => "",
         );
 
         $xpath_xml_def = project::xpath_new_context($xml_def);

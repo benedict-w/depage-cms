@@ -99,22 +99,26 @@
             });
 
             // bind cancel button if provided
-            if (base.options.cancel_button) {
-                base.$cancel_button = $('<a class="cancel-video-button" href="#cancel-video">&times;</a>').insertBefore(base.$el);
-                base.$cancel_button.click(function() {
+            if (base.options.$cancel_button) {
+                base.options.$cancel_button.addClass("custom-cancel-button");
+                base.options.$cancel_button.hide(); // display when in progress
+                base.options.$cancel_button.click(function() {
                     base.cancel();
                     return false;
                 });
             }
 
             // setup custom button if provided
-            if (base.options.custom_button) {
+            if (base.options.$custom_button) {
                 base.setupCustomButton();
             }
 
             // default drag and drop for input
             if (base.options.$drop_area === null) {
                 base.options.$drop_area = base.$el;
+            }
+
+            if (base.options.$drop_area !== false) {
                 base.dropAndDrop();
             }
         };
@@ -160,19 +164,21 @@
 
             base.$el.wrap('<div class="custom-file-input-wrapper" style="position: relative;"/>');
 
-            base.$custom_button = $('<div class="custom-upload-button">upload</div>').css({
+            base.options.$custom_button.addClass("custom-upload-button");
+
+            base.options.$custom_button.css({
                 'position': 'absolute',
                 'z-index':  1
             }).insertBefore(base.$el);
 
             // make the fileinput transparent and positioned on top of the new button
             $(base.$el).css({
-                'opacity':    '0.1',
-                'filter':     'alpha(opacity=0.1)',
+                'opacity':    '0',
+                'filter':     'alpha(opacity=0)',
                 'display':    'block',
                 'text-align': 'left',
-                'width':      base.$custom_button.outerWidth(),
-                'height':     base.$custom_button.outerHeight(),
+                'width':      base.options.$custom_button.outerWidth(),
+                'height':     base.options.$custom_button.outerHeight(),
                 'position':   'absolute',
                 'cursor':     'pointer',
                 'z-index':    999
@@ -185,13 +191,13 @@
                 }
             }
 
-            base.$custom_button
+            base.options.$custom_button
                 .addClass('custom-fileinput')
                 // keep file input under the cursor to steal the click (IE)
                 .mousemove(function(e){
                     base.$el.css({
-                        'left': e.pageX - base.$custom_button.offset().left - base.$el.outerWidth() + 20,
-                        'top': e.pageY - base.$custom_button.offset().top  - base.$el.outerHeight() + 5
+                        'left': e.pageX - base.options.$custom_button.offset().left - base.$el.outerWidth() + 20,
+                        'top': e.pageY - base.options.$custom_button.offset().top  - base.$el.outerHeight() + 5
                     });
                 });
 
@@ -204,26 +210,26 @@
                     }, 100);
                 })
                 .mouseover(function() {
-                    base.$custom_button.addClass('custom-fileinput-hover');
+                    base.options.$custom_button.addClass('custom-fileinput-hover');
                 })
                 .mouseout(function() {
-                    base.$custom_button.removeClass('custom-fileinput-hover');
+                    base.options.$custom_button.removeClass('custom-fileinput-hover');
                 })
                 .focus(function(){
-                    base.$custom_button.addClass('custom-fileinput-focus');
+                    base.options.$custom_button.addClass('custom-fileinput-focus');
                     base.$el.data('val', base.$el.val());
                 })
                 .blur(function(){
-                    base.$custom_button.addClass('custom-fileinput-blur');
+                    base.options.$custom_button.addClass('custom-fileinput-blur');
                     check_change();
                 })
                 .bind('disable',function(){
                     base.$el.attr('disabled', true);
-                    base.$custom_button.addClass('custom-fileinput-disabled');
+                    base.options.$custom_button.addClass('custom-fileinput-disabled');
                 })
                 .bind('enable',function(){
                     base.$el.removeAttr('disabled');
-                    base.$custom_button.removeClass('custom-fileinput-disabled');
+                    base.options.$custom_button.removeClass('custom-fileinput-disabled');
                 });
 
             // match disabled state
@@ -257,8 +263,8 @@
                                 base.options.$drop_area.addClass('file-drag');
                             }
                             */
+                            return false;
                         }
-                        return false;
                     })
                     .on('dragend', base.options.$drop_area, function () {
                         base.options.$drop_area.removeClass('drag-over file-drag');
@@ -606,6 +612,9 @@
          * @return void
          */
         base.start = function(){
+
+            base.options.$cancel_button.show();
+
             $(window).bind('unload.uploader', function() {
                 if (confirm(base.options.unload_message)) {
                     base.cancel();
@@ -649,6 +658,8 @@
          * @return void
          */
         base.clear = function () {
+
+            base.options.$cancel_button.hide();
 
             // clone, reset, detach to clear the element
             var $clone = base.$el.clone(true);
@@ -829,8 +840,8 @@
         unload_message: 'Navigating away from the page will cancel the file upload. Do you want to continue?',
         complete_event: 'complete',
         max_filesize: false,
-        custom_button: false,
-        cancel_button: false,
+        $custom_button: false,
+        $cancel_button: false,
         $drop_area: null,
         $progress_container: null
     };

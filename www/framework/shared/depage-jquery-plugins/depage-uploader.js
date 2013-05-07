@@ -255,24 +255,21 @@
                 $.event.fixHooks.drop = { props:["dataTransfer"] };
 
                 $(document)
-                    .on('dragover', base.options.$drop_area, function (e) {
+                    .on('dragover', function (e) {
                         if ($(e.target).is(base.options.$drop_area) || $.contains(base.options.$drop_area[0], e.target)){
                             base.options.$drop_area.addClass('drag-over');
-                            /*
-                            if (e.dataTransfer.files.length) {
-                                base.options.$drop_area.addClass('file-drag');
-                            }
-                            */
                             return false;
+                        } else {
+                            base.options.$drop_area.removeClass('drag-over file-drag');
                         }
                     })
-                    .on('dragend', base.options.$drop_area, function () {
+                    .on('dragend', function () {
                         base.options.$drop_area.removeClass('drag-over file-drag');
                         return false;
                     })
                     .on('drop', base.options.$drop_area, function (e) {
+                        base.options.$drop_area.removeClass('drag-over');
                         if ($(e.target).is(base.options.$drop_area) || $.contains(base.options.$drop_area[0], e.target)){
-                            base.options.$drop_area.removeClass('drag-over');
                             // append the dropped files to the input element (triggers upload via change event)
                             base.upload(e.dataTransfer.files);
                         }

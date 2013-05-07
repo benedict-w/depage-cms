@@ -147,125 +147,133 @@
             }
             return base.mode;
         },
-            // }}}
+        // }}}
 
-            // {{{ setupCustomButton
+        // {{{ setupCustomButton
         /**
          * setupCustomButton
          *
          * Based on http://goo.gl/uu5k6
          *
          */
-            base.setupCustomButton = function (){
+         base.setupCustomButton = function (){
 
-                base.$el.wrap('<div class="custom-file-input-wrapper" style="position: relative;"/>');
+            base.$el.wrap('<div class="custom-file-input-wrapper" style="position: relative;"/>');
 
-                base.$custom_button = $('<div class="custom-upload-button">upload</div>').css({
-                    'position': 'absolute',
-                    'z-index':  1
-                }).insertBefore(base.$el);
+            base.$custom_button = $('<div class="custom-upload-button">upload</div>').css({
+                'position': 'absolute',
+                'z-index':  1
+            }).insertBefore(base.$el);
 
-                // make the fileinput transparent and positioned on top of the new button
-                $(base.$el).css({
-                    'opacity':    '0.1',
-                    'filter':     'alpha(opacity=0.1)',
-                    'display':    'block',
-                    'text-align': 'left',
-                    'width':      base.$custom_button.outerWidth(),
-                    'height':     base.$custom_button.outerHeight(),
-                    'position':   'absolute',
-                    'cursor':     'pointer',
-                    'z-index':    999
+            // make the fileinput transparent and positioned on top of the new button
+            $(base.$el).css({
+                'opacity':    '0.1',
+                'filter':     'alpha(opacity=0.1)',
+                'display':    'block',
+                'text-align': 'left',
+                'width':      base.$custom_button.outerWidth(),
+                'height':     base.$custom_button.outerHeight(),
+                'position':   'absolute',
+                'cursor':     'pointer',
+                'z-index':    999
+            });
+
+            // for ie and opera make sure change event fires
+            function check_change() {
+                if (base.$el.val() && base.$el.val() !== base.$el.data('val')) {
+                    base.$el.trigger('change');
+                }
+            }
+
+            base.$custom_button
+                .addClass('custom-fileinput')
+                // keep file input under the cursor to steal the click (IE)
+                .mousemove(function(e){
+                    base.$el.css({
+                        'left': e.pageX - base.$custom_button.offset().left - base.$el.outerWidth() + 20,
+                        'top': e.pageY - base.$custom_button.offset().top  - base.$el.outerHeight() + 5
+                    });
                 });
 
-                // for ie and opera make sure change event fires
-                function check_change() {
-                    if (base.$el.val() && base.$el.val() !== base.$el.data('val')) {
-                        base.$el.trigger('change');
-                    }
-                }
-
-                base.$custom_button.addClass('custom-fileinput')
-                    // keep file input under the cursor to steal the click (IE)
-                    .mousemove(function(e){
-                        base.$el.css({
-                            'left': e.pageX - base.$custom_button.offset().left - base.$el.outerWidth() + 20,
-                            'top': e.pageY - base.$custom_button.offset().top  - base.$el.outerHeight() + 5
-                        });
-                    });
-
-                base.$el
-                    // check for change (IE)
-                    .click(function(){
-                        base.$el.data('val', base.$el.val());
-                        setTimeout(function(){
-                            check_change();
-                        }, 100);
-                    })
-                    .mouseover(function() {
-                        base.$custom_button.addClass('custom-fileinput-hover');
-                    })
-                    .mouseout(function() {
-                        base.$custom_button.removeClass('custom-fileinput-hover');
-                    })
-                    .focus(function(){
-                        base.$custom_button.addClass('custom-fileinput-focus');
-                        base.$el.data('val', base.$el.val());
-                    })
-                    .blur(function(){
-                        base.$custom_button.addClass('custom-fileinput-blur');
+            base.$el
+                // check for change (IE)
+                .click(function(){
+                    base.$el.data('val', base.$el.val());
+                    setTimeout(function(){
                         check_change();
-                    })
-                    .bind('disable',function(){
-                        base.$el.attr('disabled', true);
-                        base.$custom_button.addClass('custom-fileinput-disabled');
-                    })
-                    .bind('enable',function(){
-                        base.$el.removeAttr('disabled');
-                        base.$custom_button.removeClass('custom-fileinput-disabled');
-                    });
+                    }, 100);
+                })
+                .mouseover(function() {
+                    base.$custom_button.addClass('custom-fileinput-hover');
+                })
+                .mouseout(function() {
+                    base.$custom_button.removeClass('custom-fileinput-hover');
+                })
+                .focus(function(){
+                    base.$custom_button.addClass('custom-fileinput-focus');
+                    base.$el.data('val', base.$el.val());
+                })
+                .blur(function(){
+                    base.$custom_button.addClass('custom-fileinput-blur');
+                    check_change();
+                })
+                .bind('disable',function(){
+                    base.$el.attr('disabled', true);
+                    base.$custom_button.addClass('custom-fileinput-disabled');
+                })
+                .bind('enable',function(){
+                    base.$el.removeAttr('disabled');
+                    base.$custom_button.removeClass('custom-fileinput-disabled');
+                });
 
-                // match disabled state
-                if(base.$el.is('[disabled]')) {
-                    base.$el.trigger('disable');
-                }
-            },
-            // }}}
+            // match disabled state
+            if(base.$el.is('[disabled]')) {
+                base.$el.trigger('disable');
+            }
+        },
+        // }}}
 
-            // {{{
+        // {{{
         /**
          * Setup drag and drop
          *
          * Implements HTML5 drag'n'drop file uploads by monitoring browser drag events
          */
-            base.dropAndDrop = function() {
-                // check browser drag and drop support
-                var div = document.createElement('div'); // TODO could move this to support() function
-                if (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div && !!window.FileReader)) {
+        base.dropAndDrop = function() {
+            // check browser drag and drop support
+            var div = document.createElement('div'); // TODO could move this to support() function
+            if (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div && !!window.FileReader)) {
 
-                    // TODO deprecate on jquery upgrade
-                    // fix for jquery 1.7 bug http://bugs.jquery.com/ticket/10756
-                    $.event.fixHooks.drop = { props:["dataTransfer"] };
+                // TODO deprecate on jquery upgrade
+                // fix for jquery bug http://bugs.jquery.com/ticket/10756
+                $.event.fixHooks.drop = { props:["dataTransfer"] };
 
-                    $(document)
-                        .on('dragover', function () {
+                $(document)
+                    .on('dragover', base.options.$drop_area, function (e) {
+                        if ($(e.target).is(base.options.$drop_area) || $.contains(base.options.$drop_area[0], e.target)){
                             base.options.$drop_area.addClass('drag-over');
-                            return false;
-                        })
-                        .on('dragend', function () {
-                            base.options.$drop_area.removeClass('drag-over');
-                            return false;
-                        })
-                        .on('drop', function (e) {
-                            if ($(e.target).is(base.options.$drop_area) || $.contains(base.options.$drop_area[0], e.target)){
-                                base.options.$drop_area.removeClass('drag-over');
-                                // append the dropped files to the input element (triggers upload via change event)
-                                base.$el.prop("files", e.dataTransfer.files);
+                            /*
+                            if (e.dataTransfer.files.length) {
+                                base.options.$drop_area.addClass('file-drag');
                             }
-                            return false;
-                        });
-                }
+                            */
+                        }
+                        return false;
+                    })
+                    .on('dragend', base.options.$drop_area, function () {
+                        base.options.$drop_area.removeClass('drag-over file-drag');
+                        return false;
+                    })
+                    .on('drop', base.options.$drop_area, function (e) {
+                        if ($(e.target).is(base.options.$drop_area) || $.contains(base.options.$drop_area[0], e.target)){
+                            base.options.$drop_area.removeClass('drag-over');
+                            // append the dropped files to the input element (triggers upload via change event)
+                            base.upload(e.dataTransfer.files);
+                        }
+                        return false;
+                    });
             }
+        }
         // }}}
 
         // {{{ upload()
@@ -277,7 +285,7 @@
          * @param fileinput
          * @return void
          */
-        base.upload = function(fileinput){
+        base.upload = function(files){
             switch(base.mode){
                 case 'iframe' :
                 case 'nginx' :
@@ -285,7 +293,7 @@
                     base.iframe.upload();
                     break;
                 case 'xhr' :
-                    base.xhr.upload();
+                    base.xhr.upload(files);
                     break;
             }
         };
@@ -509,7 +517,7 @@
              *
              * return bool
              */
-            upload : function(){
+            upload : function(files){
                 if (base.options.max_filesize && base.options.max_filesize > base.el.filesize) {
                     base.error('max file size exceeded');
                     return false;
@@ -538,8 +546,8 @@
                 formData.append('ajax', 'true');
 
                 // append the files
-                for(var i in base.el.files) {
-                    formData.append(base.el.name, base.el.files[i]);
+                for(var i in files) {
+                    formData.append(base.el.name, files[i]);
                 }
 
                 base.xhrHttpRequest.send(formData);

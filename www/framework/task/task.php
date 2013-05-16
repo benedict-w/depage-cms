@@ -269,6 +269,7 @@ class task {
         return $this->pdo->lastInsertId();
     }
     // }}}
+
     // {{{ addSubtasks()
     /* addSubtasks creates multiple subtasks.
      * specify tasks as an array of arrays containing name, php and depends_on keys.
@@ -290,7 +291,45 @@ class task {
         }
     }
     // }}}
-    
+
+    // {{{ addSuccessHandler()
+    /**
+     * addSuccessHandler
+     *
+     * @return bool
+     */
+    public function addSuccessHandler($php) {
+        $query = $this->pdo->prepare(
+            "UPDATE {$this->subtask_table}
+                SET success_handler = :php
+                WHERE id = :id"
+        );
+        return $query->execute(array(
+            "php" => $php,
+            "id" => $this->task_id,
+        ));
+    }
+    // }}}
+
+    // {{{ addFailHandler()
+    /**
+     * addFailHandler
+     *
+     * @return bool
+     */
+    public function addFailHandler($php) {
+        $query = $this->pdo->prepare(
+            "UPDATE {$this->subtask_table}
+                SET fail_handler = :php
+                WHERE id = :id"
+        );
+        return $query->execute(array(
+            "php" => $php,
+            "id" => $this->task_id,
+        ));
+    }
+    // }}}
+
     // {{{ getProgress()
     public function getProgress() {
         $progress = array();
@@ -381,6 +420,8 @@ class task {
 
         $this->task_name = $result->name;
         $this->status = $result->status;
+        $this->success_handler = $result->success_handler;
+        $this->fail_handler = $result->fail_handler;
 
         return $this;
     }

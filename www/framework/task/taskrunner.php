@@ -110,6 +110,11 @@ class taskrunner extends \depage_ui {
                     $this->task->setSubtaskStatus($subtask, "done");
                 }
 
+                // run success handler
+                if ($this->task->success_handler) {
+                    eval($this->task->success_handler);
+                }
+
                 $this->log->log("finished task {$task_id} ({$this->task->task_name})");
                 $this->task->setTaskStatus("done");
                 $this->task->remove();
@@ -117,6 +122,11 @@ class taskrunner extends \depage_ui {
                 $this->task->setSubtaskStatus($subtask, "failed: " . $e->getMessage());
                 $this->task->setTaskStatus("failed");
                 $this->log->log("ERROR: " . $e->getMessage());
+
+                // run fail handler
+                if ($this->task->fail_handler) {
+                    eval($this->task->fail_handler);
+                }
             }
             
             $this->task->unlock();

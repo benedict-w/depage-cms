@@ -95,7 +95,7 @@
 
             // add file click handlers
             base.$el.change(function() {
-                base.upload();
+                base.upload(base.$el[0].files);
             });
 
             // bind cancel button if provided
@@ -670,7 +670,7 @@
 
             // rebind change
             base.$el.change(function() {
-                base.upload();
+                base.upload(base.$el[0].files);
             });
 
             base.setProgress(0);

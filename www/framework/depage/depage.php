@@ -404,7 +404,7 @@ class depage {
     } 
     // }}}
     // {{{ localeLookup
-    static protected function localeLookup($availableLocales, $lang) {
+    static public function localeLookup($availableLocales, $lang) {
         $locale = "";
 
         if (strlen($lang) == 2) {

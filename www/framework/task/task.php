@@ -22,7 +22,6 @@ class task {
         $this->task_table = $table_prefix . "_tasks";
         $this->subtask_table = $table_prefix . "_subtasks";
         $this->pdo = $pdo;
-
     }
     // }}}
     
@@ -162,6 +161,7 @@ class task {
         ));
     }
     // }}}
+
     // {{{ setSubtaskStatus()
     public function setSubtaskStatus($subtask, $status) {
         $query = $this->pdo->prepare(
@@ -300,7 +300,7 @@ class task {
      */
     public function addSuccessHandler($php) {
         $query = $this->pdo->prepare(
-            "UPDATE {$this->subtask_table}
+            "UPDATE {$this->task_table}
                 SET success_handler = :php
                 WHERE id = :id"
         );
@@ -319,7 +319,7 @@ class task {
      */
     public function addFailHandler($php) {
         $query = $this->pdo->prepare(
-            "UPDATE {$this->subtask_table}
+            "UPDATE {$this->task_table}
                 SET fail_handler = :php
                 WHERE id = :id"
         );
@@ -405,10 +405,11 @@ class task {
     // {{{ loadTask();
     private function loadTask() {
         $query = $this->pdo->prepare(
-            "SELECT name, status 
+            "SELECT name, status, success_handler, fail_handler
             FROM {$this->task_table} 
             WHERE id = :id"
         );
+
         $query->execute(array(
             "id" => $this->task_id,
         ));

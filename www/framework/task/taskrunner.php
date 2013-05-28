@@ -52,6 +52,7 @@ class taskrunner extends \depage_ui {
         'phpcli' => "",
     );
     protected $options = array();
+    protected $lowPriority = false;
     // }}}
     
     // {{{ constructor
@@ -93,6 +94,7 @@ class taskrunner extends \depage_ui {
         register_shutdown_function(array($this, "_atShutdown"));
         
         if ($this->task->lock()) {
+            $subtask = null;
             try {
                 $this->log->log("starting task {$task_id} ({$this->task->task_name})");
 

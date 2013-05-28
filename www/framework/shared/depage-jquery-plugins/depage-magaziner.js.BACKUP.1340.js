@@ -12,20 +12,27 @@
  * @author    Frank Hellenkamp [jonas@depage.net]
  **/
 ;(function($){
+<<<<<<< HEAD
+    if(!$.depage){
+        $.depage = {};
+    }
+    
+    $.depage.magaziner = function(el, options){
+=======
     "use strict";
     /*jslint browser: true*/
     /*global $:false */
-
+    
     if(!$.depage){
         $.depage = {};
     }
 
     var rootUrl = History.getRootUrl();
-
+    
     // {{{ jquery.internal expression helper
     $.expr[':'].internal = function(obj, index, meta, stack){
         var url = $(obj).attr('href') || '';
-
+        
         // Check link
         return url.substring(0, rootUrl.length) === rootUrl || url.indexOf(':') === -1;
     };
@@ -34,19 +41,19 @@
     var documentHtml = function(html){
         // Prepare
         var result = String(html)
-                .replace(/<\!DOCTYPE[^>]*>(\n)?/i, '')
-                .replace(/<(body)[\s]class="([^"]*)"([\s\>])/gi,'<div class="document-$1 $2"$3')
-                .replace(/<(html|head|body|title|meta|script)([\s\>])/gi,'<div class="document-$1"$2')
-                .replace(/<\/(html|head|body|title|meta|script)\>/gi,'</div>')
-            ;
-
+            .replace(/<\!DOCTYPE[^>]*>(\n)?/i, '')
+            .replace(/<(body)[\s]class="([^"]*)"([\s\>])/gi,'<div class="document-$1 $2"$3')
+            .replace(/<(html|head|body|title|meta|script)([\s\>])/gi,'<div class="document-$1"$2')
+            .replace(/<\/(html|head|body|title|meta|script)\>/gi,'</div>')
+        ;
+        
         return result;
     };
     // }}}
     // {{{ jquery.ajaxify Helper
     $.fn.ajaxify = function() {
         var $this = $(this);
-
+        
         // Ajaxify
         $this.find('a:internal:not(.no-ajaxy)').click(function(event){
             // Prepare
@@ -54,32 +61,39 @@
                 $this = $(this),
                 url = $this.attr('href'),
                 title = $this.attr('title') || null;
-
+            
             // Continue as normal for cmd clicks etc
             if ( event.which == 2 || event.metaKey ) { return true; }
-
+            
             // Ajaxify this link
             History.pushState(null,title,url);
             event.preventDefault();
             return false;
         });
-
+        
         // Chain
         return $this;
     };
     // }}}
-
+    
     $.depage.magaziner = function(el, pagelinkSelector, options){
         // {{{ variables
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
         // To avoid scope issues, use 'base' instead of 'this' to reference this class from internal events and functions.
         var base = this;
-
+        
         // Access to jQuery and DOM versions of element
         base.$el = $(el);
         base.el = el;
-
+        
         // Add a reverse reference to the DOM object
         base.$el.data("depage.magaziner", base);
+<<<<<<< HEAD
+        
+        var $pages = base.$el.children(".page");
+        var pageWidth = base.$el.width();
+        var speed = 300;
+=======
 
         // jquery object of body
         var $body = $("body");
@@ -100,10 +114,27 @@
         var speed = 300;
 
         // global hammer options to drag only in one direction
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
         var hammerOptions = {
             drag_lock_to_axis: true
         };
         var scrollTop;
+<<<<<<< HEAD
+        base.currentPage = $pages.index(".current-page");
+        if (base.currentPage == -1) {
+            base.currentPage = 0;
+        }
+        // @todo delete/do not commit
+        //base.currentPage = 9;
+
+        base.init = function(){
+            base.options = $.extend({},$.depage.magaziner.defaultOptions, options);
+            
+            // initialize Events
+            base.$el.on('touchmove', function (e) {
+                e.preventDefault();
+            });
+=======
 
         // get the currently loaded page
         base.currentPage = 0;
@@ -158,8 +189,9 @@
                 e.preventDefault();
             });
             // }}}
-
+            
             // {{{ horizontal scrolling between pages
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
             base.$el.hammer(hammerOptions).on("dragleft", function(e) {
                 $pages.each( function(i) {
                     var $page = $(this);
@@ -176,8 +208,11 @@
                     });
                 });
             });
+<<<<<<< HEAD
+=======
             // }}}
             // {{{ vertical scrolling
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
             base.$el.hammer(hammerOptions).on("dragup", function(e) {
                 base.$el.css({
                     top: e.gesture.deltaY
@@ -188,8 +223,11 @@
                     top: e.gesture.deltaY
                 });
             });
+<<<<<<< HEAD
+=======
             // }}}
             // {{{ dragend actions after horizontal or vertical scrolling
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
             base.$el.hammer(hammerOptions).on("dragend", function(e) {
                 var newXOffset = 0;
                 var newYOffset = 0;
@@ -211,10 +249,17 @@
                 base.$el.css({
                     top: 0
                 });
+<<<<<<< HEAD
+                var currentPos = $(window).scrollTop() - e.gesture.deltaY;
+                var targetPos = $(window).scrollTop() - e.gesture.deltaY - 300 * e.gesture.velocityY * newYOffset;
+
+                window.scrollTo(0, $(window).scrollTop() - e.gesture.deltaY);
+=======
                 var currentPos = $window.scrollTop() - e.gesture.deltaY;
                 var targetPos = $window.scrollTop() - e.gesture.deltaY - 300 * e.gesture.velocityY * newYOffset;
 
                 window.scrollTo(0, $window.scrollTop() - e.gesture.deltaY);
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
 
                 $pages.not(".current-page").css({
                     top: currentPos
@@ -226,9 +271,13 @@
                     }, 300 * e.gesture.velocityY);
                 }
             });
+<<<<<<< HEAD
+            $(document).on("keypress, keyup", function(e) {
+=======
             // }}}
             // {{{ key events
             $document.on("keypress ", function(e) {
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
                 if ($(document.activeElement).is(':input')){
                     // continue only if an input is not the focus
                     return true;
@@ -248,17 +297,39 @@
                         e.preventDefault();
                         break;
                     case 74 : // vim nav: j
+<<<<<<< HEAD
+                        window.scrollTo(0, $(window).scrollTop() + 50);
+                        e.preventDefault();
+                        break;
+                    case 75 : // vim nav: k
+                        window.scrollTo(0, $(window).scrollTop() - 50);
+=======
                         window.scrollTo(0, $window.scrollTop() + 50);
                         e.preventDefault();
                         break;
                     case 75 : // vim nav: k
                         window.scrollTo(0, $window.scrollTop() - 50);
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
                         e.preventDefault();
                         break;
                 }
             });
-            // }}}
+<<<<<<< HEAD
+            $(window).scroll( function() {
+                $pages.not(".current-page").css({
+                    top: $(window).scrollTop()
+                });
+            });
+            $(window).resize( function() {
+                pageWidth = base.$el.width();
+                base.show(base.currentPage);
+            });
 
+            base.show(base.currentPage);
+        };
+=======
+            // }}}
+            
             // {{{ scroll event
             $window.scroll( function() {
                 $pages.not(".current-page").css({
@@ -272,7 +343,7 @@
                 base.show(base.currentPage);
             });
             // }}}
-
+            
             // {{{ statechange event
             $window.bind("statechange", function() {
                 var
@@ -290,7 +361,7 @@
                 var
                     State = History.getState(),
                     url = State.url,
-                    title = $currentPage.data("title");
+                    title = $currentPage.data("title"); 
 
                 if (title) {
                     // Update the title
@@ -300,7 +371,7 @@
                     }
                     catch ( Exception ) { }
                 }
-
+                
                 // Inform Google Analytics of the change
                 if ( typeof window._gaq !== 'undefined' ) {
                     window._gaq.push(['_trackPageview', url]);
@@ -315,7 +386,8 @@
             // }}}
         };
         // }}}
-
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
+        
         // {{{ showPagesAround(n)
         base.showPagesAround = function(n) {
             $pages.eq(n - 1).show();
@@ -323,6 +395,8 @@
             $pages.eq(n + 1).show();
         };
         // }}}
+<<<<<<< HEAD
+=======
         // {{{ preloadPage()
         base.preloadPage = function(n) {
             if (n < 0 || n >= $pages.length) {
@@ -344,9 +418,9 @@
 
                 return true;
             }
-
+                
             $page.addClass("loading");
-
+            
             // Ajax Request the Traditional Page
             $.ajax({
                 url: url,
@@ -356,9 +430,9 @@
                         $data = $(documentHtml(data)),
                         $dataBody = $data.find('.document-body:first'),
                         $dataContent = $dataBody.find(".page").filter(':first'),
-                        contentHtml,
+                        contentHtml, 
                         $scripts;
-
+                    
                     // Fetch the scripts
                     $scripts = $dataContent.find('.document-script');
                     if ( $scripts.length ) {
@@ -371,7 +445,7 @@
                         document.location.href = url;
                         return false;
                     }
-
+                    
                     // Update the content
                     $page.html(contentHtml).ajaxify();
 
@@ -407,13 +481,17 @@
             $page.empty();
         };
         // }}}
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
         // {{{ show()
         base.show = function(n) {
             var resetScroll = base.currentPage != n;
 
             base.currentPage = n;
             base.showPagesAround(base.currentPage);
+<<<<<<< HEAD
+=======
             base.preloadPage(n);
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
 
             // horizontal scrolling between pages
             $pages.each( function(i) {
@@ -431,13 +509,21 @@
                     });
                     $pages.hide();
                     base.showPagesAround(base.currentPage);
+<<<<<<< HEAD
+=======
 
                     base.preloadPage(n - 1);
                     base.preloadPage(n + 1);
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
                 }
             });
 
             $pages.removeClass("current-page");
+<<<<<<< HEAD
+            $pages.eq(n).addClass("current-page");
+
+            base.$el.triggerHandler("depage.magaziner.show", [n]);
+=======
             $currentPage = $pages.eq(n);
             $currentPage.addClass("current-page");
 
@@ -446,6 +532,7 @@
             if (resetScroll) {
                 History.pushState(null, null, urlsByPages[base.currentPage]);
             }
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
         };
         // }}}
         // {{{ next()
@@ -471,20 +558,26 @@
             }
         };
         // }}}
-
+        
         // Run initializer
         setTimeout(base.init, 50);
     };
-
+    
     $.depage.magaziner.defaultOptions = {
         option1: "default"
     };
-
+    
+<<<<<<< HEAD
+    $.fn.depageMagaziner = function(options){
+        return this.each(function(){
+            (new $.depage.magaziner(this, options));
+=======
     $.fn.depageMagaziner = function(pagelinkSelector, options){
         return this.each(function(){
             (new $.depage.magaziner(this, pagelinkSelector, options));
+>>>>>>> b8680bb3ffc4d48b31184878b26eb29b9f22d9bb
         });
     };
-
+    
 })(jQuery);
 /* vim:set ft=javascript sw=4 sts=4 fdm=marker : */

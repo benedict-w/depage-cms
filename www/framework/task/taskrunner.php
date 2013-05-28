@@ -137,6 +137,7 @@ class taskrunner extends \depage_ui {
         $this->abnormal_exit = false;        
     }
     // }}}
+
     // {{{ run
     public function run($task_id, $lowPriority = false) {
         $this->lowPriority = $lowPriority;

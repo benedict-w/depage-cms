@@ -23,8 +23,8 @@
 (function($){
     if(!$.depage){
         $.depage = {};
-    };
-
+    }
+    
     /**
      * Uploader
      *
@@ -81,7 +81,8 @@
                 // make iframe id unique // TODO enforce
                 base.options.iframe = base.el.name.replace(/\[\]/g, '') + '_' + index + '_' + base.options.iframe;
                 base.iframe.build();
-            };
+            }
+            
 
             // for multiple files input name should be an array
             /*
@@ -694,8 +695,8 @@
             var text = "";
 
             base.controls.percent.width(percent + '%');
-
-            if (loaded != undefined && total != undefined) {
+            
+            if (loaded !== undefined && total !== undefined) {
                 text += Math.floor(percent * 10) / 10;
                 text += " % uploaded (";
                 text += base.bytesToSize(loaded, 1);

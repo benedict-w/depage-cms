@@ -233,7 +233,7 @@
                     // continue only if an input is not the focus
                     return true;
                 }
-                if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) {
+                if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) {
                     return true;
                 }
                 switch (parseInt(e.which || e.keyCode, 10)) {
@@ -325,7 +325,7 @@
         // }}}
         // {{{ preloadPage()
         base.preloadPage = function(n) {
-            if (n < 0 || n >= $pages.length) {
+            if (n < 0 || n >= $pages.length) {
                 return;
             }
             var url = urlsByPages[n];

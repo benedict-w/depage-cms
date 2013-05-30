@@ -174,11 +174,17 @@
                         // handle click if tab is not disabled
                         base.axTabs.load(e, $tab.attr('href'));
                         base.setActive($(this));
-                        base.changeHash($tab.attr('href'));
                         base.$el.trigger('select', e);
                     }
                     return false;
                 });
+
+                /*
+                 * show the active tab
+                 */
+                if ($tab.parent('li').hasClass(base.options.classes.active)) {
+                    base.axTabs.load(null, $tab.attr('href'));
+                }
             },
             
             /**

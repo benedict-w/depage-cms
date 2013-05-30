@@ -112,14 +112,19 @@
                 if ($tab.parent('li').hasClass(base.options.classes.active)) {
                     base.jsTabs.load(null, $tab.attr('href'));
                 }
+
                 /*
                  * add tab click handlers
                  */
                 $tab.click(function(e) {
-                    base.hide();
-                    base.jsTabs.load(e, $tab.attr('href'));
-                    base.setActive($(this));
-                    base.$el.trigger('select', e);
+                    if (!$tab.parent('li').hasClass(base.options.classes.disabled)) {
+                        // handle click if tab is not disabled
+                        base.hide();
+                        base.jsTabs.load(e, $tab.attr('href'));
+                        base.setActive($(this));
+                        window.location.hash = $tab.attr('href');
+                        base.$el.trigger('select', e);
+                    }
                     return false;
                 });
             },
@@ -159,10 +164,14 @@
                  * Add Tab click handlers
                  */
                 $tab.click(function(e) {
-                    base.hide();
-                    base.axTabs.load(e, $tab.attr('href'));
-                    base.setActive($(this));
-                    base.$el.trigger('select', e);
+                    if (!$tab.parent('li').hasClass(base.options.classes.disabled)) {
+                        // handle click if tab is not disabled
+                        base.hide();
+                        base.axTabs.load(e, $tab.attr('href'));
+                        base.setActive($(this));
+                        base.$el.trigger('select', e);
+                        window.location.hash = $tab.attr('href');
+                    }
                     return false;
                 });
             },
@@ -231,9 +240,10 @@
      */
     $.depage.tabs.defaultOptions = {
         classes : {
-            ul      : 'nav',
-            active  : 'active',
-            content : 'content'
+            ul        : 'nav',
+            active    : 'active',
+            disabled  : 'disabled',
+            content   : 'content'
         },
         force_ajax : false
     };

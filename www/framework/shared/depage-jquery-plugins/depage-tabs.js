@@ -62,6 +62,10 @@
             $tabs.each(function(){
                 var $tab = $(this);
                 var href = $tab.attr('href');
+                // set active tab according to location hash
+                if(href === window.location.hash) {
+                    base.setActive($tab);
+                }
                 if (base.isAjaxTab(href)) {
                     base.axTabs.init($tab);
                 } else {
@@ -119,14 +123,20 @@
                 $tab.click(function(e) {
                     if (!$tab.parent('li').hasClass(base.options.classes.disabled)) {
                         // handle click if tab is not disabled
-                        base.hide();
                         base.jsTabs.load(e, $tab.attr('href'));
                         base.setActive($(this));
-                        window.location.hash = $tab.attr('href');
+                        base.changeHash($tab.attr('href'));
                         base.$el.trigger('select', e);
                     }
                     return false;
                 });
+
+                /*
+                 * Show the first tab if none are active
+                 */
+                if(!$('.' + base.options.classes.active, base).length) {
+                    $('div.' + base.options.classes.content + ':first').show();
+                }
             },
             
             /**
@@ -135,6 +145,7 @@
              * @param href - the anchor name to show
              */
             load : function(e, href) {
+                base.hide();
                 // get the anchor name
                 href = href.substring(href.indexOf('#'), href.length);
                 var $data = $(href).show();
@@ -156,21 +167,15 @@
              */
             init : function($tab) {
                 /*
-                 * Show the active tab
-                 */
-                $('div.' + base.options.classes.content + ':first').show();
-                
-                /*
                  * Add Tab click handlers
                  */
                 $tab.click(function(e) {
                     if (!$tab.parent('li').hasClass(base.options.classes.disabled)) {
                         // handle click if tab is not disabled
-                        base.hide();
                         base.axTabs.load(e, $tab.attr('href'));
                         base.setActive($(this));
+                        base.changeHash($tab.attr('href'));
                         base.$el.trigger('select', e);
-                        window.location.hash = $tab.attr('href');
                     }
                     return false;
                 });
@@ -184,6 +189,7 @@
              * @param href -  the ajax url to fetch content from
              */
             load : function(e, href) {
+                base.hide();
                 // remove url hash component
                 href = href.substring(0, href.indexOf('#') > 0 ? href.indexOf('#') : href.length);
                 $.get(href, {"ajax":"true"}, function(data) {
@@ -216,6 +222,24 @@
             $tabs.parent('li').removeClass(base.options.classes.active);
             $tab.parent('li').addClass(base.options.classes.active);
         };
+        // }}}
+
+        // {{{ changeHash()
+        /**
+         * Change Hash
+         *
+         * wraps location hash change, using history for newer browsers to preven the page jump.
+         *
+         * @param hash
+         */
+        base.changeHash = function(hash) {
+            if(history.pushState) {
+                history.pushState(null, null, window.location.pathname + hash);
+            }
+            else {
+                window.location.hash = hash;
+            }
+        }
         // }}}
         
         // {{{ hide()

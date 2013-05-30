@@ -790,14 +790,14 @@
                 })
             };
 
-            base.$el.after(base.controls.textinfo);
-
-            base.controls.progress.append(base.controls.percent);
-
             if(base.options.$progress_container) {
+                base.options.$progress_container.append(base.controls.percent);
                 base.options.$progress_container.append(base.controls.progress);
+                base.options.$progress_container.append(base.controls.textinfo);
             } else {
+                base.controls.progress.append(base.controls.percent);
                 base.$el.after(base.controls.progress);
+                base.$el.after(base.controls.textinfo);
             }
         };
         // }}}

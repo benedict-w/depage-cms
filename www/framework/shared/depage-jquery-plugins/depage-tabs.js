@@ -72,6 +72,13 @@
                     base.jsTabs.init($tab);
                 }
             });
+
+            /*
+             * Show the first tab if none are active
+             */
+            if(!($('.' + base.options.classes.active, base.$el).length)) {
+                $('div.' + base.options.classes.content + ':first').show();
+            }
         };
         // }}}
         
@@ -130,13 +137,6 @@
                     }
                     return false;
                 });
-
-                /*
-                 * Show the first tab if none are active
-                 */
-                if(!$('.' + base.options.classes.active, base).length) {
-                    $('div.' + base.options.classes.content + ':first').show();
-                }
             },
             
             /**
